@@ -68,10 +68,7 @@ end
 
 M.init_host = function(host, ask_pass)
   -- If already connected, disconnect
-  if sshfs_job_id then
-    -- Kill the SSHFS process
-    vim.fn.jobstop(sshfs_job_id)
-  end
+  M.unmount_host()
 
   -- Create/confirm mount directory
   local remote_host = host["Name"]
@@ -167,6 +164,9 @@ M.unmount_host = function()
   if sshfs_job_id then
     -- Kill the SSHFS process
     vim.fn.jobstop(sshfs_job_id)
+    if vim.fn.has("mac") then
+      vim.fn.system("diskutil umount force "..mount_point)
+    end
   end
 end
 
