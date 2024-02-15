@@ -58,11 +58,11 @@ M.connect = function(host)
     ui.prompt_yes_no(prompt, function(item_short)
       ui.clear_prompt()
       if item_short == "y" then
-        M.init_host(host)
+        M.init_host(host, true)
       end
     end)
   else
-    M.init_host(host)
+    M.init_host(host, true)
   end
 end
 
