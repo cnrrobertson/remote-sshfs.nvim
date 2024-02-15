@@ -72,6 +72,17 @@ M.setup_commands = function()
   end, {})
 end
 
+M.setup_autocmds = function(config)
+  vim.api.nvim_create_augroup("Remote", {})
+  if config.unmount_on_exit then
+    vim.api.nvim_create_autocmd({"ExitPre"}, {
+      group = "Remote",
+      pattern = {"*"},
+      callback = require("remote-sshfs.connections").unmount_host()
+    })
+  end
+end
+
 M.setup = function(config)
   local opts = config and vim.tbl_deep_extend("force", default_opts, config) or default_opts
 
@@ -81,6 +92,7 @@ M.setup = function(config)
   require("remote-sshfs.log").setup(opts)
 
   M.setup_commands()
+  M.setup_autocmds(opts)
 end
 
 return M
